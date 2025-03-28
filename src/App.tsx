@@ -1,35 +1,38 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from 'react';
+import * as C from './App.styles';
+import { Item } from './types/Item';
+import { ListItem } from './components/ListItem';
+import { AddArea } from './components/AddArea';
 
 function App() {
-  const [count, setCount] = useState(0)
+    const [list, setList] = useState<Item[]>([
+        { id: 1, name: 'Comprar o pão na padaria', done: false },
+        { id: 2, name: 'Comprar um bolo na padaria', done: true },
+    ]);
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    const handleAddTask = (taskName: string) => {
+        const newList = [...list];
+        newList.push({
+            id: list.length + 1,
+            name: taskName,
+            done: false,
+        });
+        setList(newList);
+    };
+
+    return (
+        <C.Container>
+            <C.Area>
+                <C.Header>Lista de Tarefas</C.Header>
+
+                <AddArea onEnter={handleAddTask}></AddArea>
+
+                {list.map((item: Item, index: number) => (
+                    <ListItem key={index} item={item} />
+                ))}
+            </C.Area>
+        </C.Container>
+    );
 }
 
-export default App
+export default App;
